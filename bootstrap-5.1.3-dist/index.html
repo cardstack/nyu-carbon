@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome =1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css">
+    <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+
+</head>
+<style type="text/css">
+    .help-block {
+        font-size: 9pt;
+    }
+    h3 {
+        padding: 10px;
+    }
+    .table-responsive {
+        max-height: 500px;
+    }
+</style>
+
+<body>
+    <div class="content container-lg">
+    <div class="mx-auto" style="width: 400px;">
+        <!-- <h1>Transaction code</h1>-->
+        <p class="fs-1 fw-bolder">Transaction code</p>
+    <form class="d-flex">
+         
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button id="btn_search" class="btn btn-outline-success" type="button">Search</button>
+        
+      </form>
+    </div>
+    <br>
+   
+    <div class="table-responsive">
+        <div id="toolbar" class="btn-toolbar pull-left">
+        <table id="gridTable1" class="table table-striped table-bordered"  style="width:100%">
+            <thead>
+                <tr>
+
+                    <!--<th data-field="checkbox" data-checkbox="true"></th>-->
+                    <th data-field="transaction_index" data-sortable="true">Transaction Index</th>
+                    <th data-field="block_timestamp" data-sortable="true">Block Timestamp</th>
+                    <th data-field="gas" data-sortable="true">Gas</th>
+                    <th data-field="gas_price" data-sortable="true">Gas Price</th>
+                    <th data-field="receipt_gas_used" data-sortable="true">Receipt Gas Used</th>
+                    <th data-field="receipt_cumulative_gas_used" data-sortable="true">Receipt Cumulative Gas Used</th>
+                    <th data-field="receipt_effective_gas_price" data-sortable="true">Receipt Effective Gas Price</th>
+                    
+                </tr>
+            </thead>
+        </table>
+    </div>
+    </div>
+</div>
+
+
+
+</body>
+</html>
+<script type="text/javascript">
+var $tbl = $('#gridTable1');
+
+
+function showtable()
+{
+    $.ajax({
+        url: "db.json",
+        type: 'get',
+        dataType: 'json',
+  error: function(data){
+  },
+  success: function(data){
+    $tbl.bootstrapTable({
+                data: data
+            });             
+  }
+    });
+}
+
+        $("#btn_search").click(function () {
+            showtable()
+        });
+
+
+</script>
+
