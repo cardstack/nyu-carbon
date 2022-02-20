@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome =1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NYU Carbon</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css">
+    <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+
+</head>
+<style type="text/css">
+    .help-block {
+        font-size: 9pt;
+    }
+    .header {
+            position: sticky;
+            top:0;
+        }
+    h3 {
+        padding: 10px;
+    }
+    .table-responsive {
+        max-height: 500px;
+    }
+</style>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbar"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button> 
+      <div class="collapse navbar-collapse" id="navbar">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link" id="home" href="/">Home</a>
+          <a class="nav-item nav-link" id="co2e" href="/search-co2e">CO2e</a>
+        </div>
+      </div>      
+    </nav>
+    <div class="content container-lg">
+    <div class="mx-auto" style="width: 800px;">
+        <!-- <h1>Transaction code</h1>-->
+    </br>
+        <p class="fs-1 fw-bolder">Cool Cat Transaction CO2e</p>
+        <label class="fs-5 fw-bolder">Contract Address</label><br>
+        <input type="text" id="contract" value=""><br>
+        <label class="fs-5 fw-bolder">Token ID</label><br>
+        <input type="text" id="token" value=""><br><br>
+        <button id="btn_search" class="btn btn-outline-success" type="button">Search</button><br><br>
+        
+        <p class="fs-5 fw-bolder">Result： <span id="resultText"></span></p>
+    </div>
+    <br>
+   
+
+</body>
+</html>
+<script type="text/javascript">
+
+function postData(url, data) {
+  // Default options are marked with *
+  return fetch(url, {
+      body: JSON.stringify(data), // must match 'Content-Type' header
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, same-origin, *omit
+      headers: {
+          'user-agent': 'Example',
+          'content-type': 'application/json'
+      },
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      mode: 'cors', // no-cors, cors, *same-origin
+      redirect: 'follow', // manual, *follow, error
+      referrer: 'no-referrer', // *client, no-referrer
+  })
+      .then(response => response.json()) // output json
+}
+
+
+function submit(){
+
+    const contract = document.getElementById('contract').value;
+    const token = document.getElementById('token').value;
+
+    const data = {contract, token}
+
+
+    postData('https://nyu-carbon.herokuapp.com/co2e', data)
+    .then(data => {
+        const result=data.result
+        document.getElementById('resultText').innerHTML=result;
+    })
+    .catch(error => console.error(error))
+
+}
+$("#btn_search").click(function () {
+            submit()
+        });
+
+
+
+</script>
+
