@@ -51,7 +51,7 @@
     </br>
         <p class="fs-1 fw-bolder">Cool Cat Transaction CO2e</p>
         <label class="fs-5 fw-bolder">Contract Address</label><br>
-        <input type="text" id="contract" value=""><br>
+        <input type="text" id="contract" value=""><br><br>
         <label class="fs-5 fw-bolder">Token ID</label><br>
         <input type="text" id="token" value=""><br><br>
         <button id="btn_search" class="btn btn-outline-success" type="button">Search</button><br><br>
@@ -66,21 +66,21 @@
 <script type="text/javascript">
 
 function postData(url, data) {
-  // Default options are marked with *
-  return fetch(url, {
-      body: JSON.stringify(data), // must match 'Content-Type' header
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, same-origin, *omit
-      headers: {
-          'user-agent': 'Example',
-          'content-type': 'application/json'
-      },
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      mode: 'cors', // no-cors, cors, *same-origin
-      redirect: 'follow', // manual, *follow, error
-      referrer: 'no-referrer', // *client, no-referrer
-  })
-      .then(response => response.json()) // output json
+    // Default options are marked with *
+    return fetch(url, {
+        body: JSON.stringify(data), // must match 'Content-Type' header
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, same-origin, *omit
+        headers: {
+            'user-agent': 'Example',
+            'content-type': 'application/json'
+        },
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, cors, *same-origin
+        redirect: 'follow', // manual, *follow, error
+        referrer: 'no-referrer', // *client, no-referrer
+    })
+        .then(response => response.json()) // output json
 }
 
 
