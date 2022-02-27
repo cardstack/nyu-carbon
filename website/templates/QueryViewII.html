@@ -49,14 +49,14 @@
     <div class="mx-auto" style="width: 800px;">
         <!-- <h1>Transaction code</h1>-->
     </br>
-        <p class="fs-1 fw-bolder">Cool Cat Transaction CO2e</p>
+        <p class="fs-1 fw-bolder">NFT Transaction CO2e</p>
         <label class="fs-5 fw-bolder">Contract Address</label><br>
         <input type="text" id="contract" value=""><br><br>
         <label class="fs-5 fw-bolder">Token ID</label><br>
         <input type="text" id="token" value=""><br><br>
         <button id="btn_search" class="btn btn-outline-success" type="button">Search</button><br><br>
         
-        <p class="fs-5 fw-bolder">Result： <span id="resultText"></span></p>
+        <p class="fs-5 fw-bolder"> <span id="resultText"></span></p>
     </div>
     <br>
    
@@ -100,9 +100,11 @@ function submit(){
     .catch(error => console.error(error))
 
 }
+
 $("#btn_search").click(function () {
             submit()
         });
+
 
 
 
