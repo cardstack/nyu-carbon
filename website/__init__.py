@@ -2,7 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 import os
-
+import pymysql
 
 db = SQLAlchemy()
 db_user = os.environ.get('DB_USER')
