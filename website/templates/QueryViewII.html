@@ -92,7 +92,7 @@ function submit(){
     const data = {contract, token}
 
 
-    postData('http://192.168.1.2:3000/co2e', data)
+    postData('https://nyu-carbon.herokuapp.com/co2e', data)
     .then(data => {
         const result=data.result
         document.getElementById('resultText').innerHTML=result;
