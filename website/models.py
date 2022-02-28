@@ -3,7 +3,7 @@ from . import db
 class coolcat(db.Model):
     token_id = db.Column(db.Integer, primary_key = True)
     receipt_gas_used = db.Column(db.String(10))
-    co2 = db.Column(db.Float(10))
+    watt_per_tran = db.Column(db.Float(10))
 
 
 def predict(input):
