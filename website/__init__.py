@@ -12,7 +12,7 @@ def create_app():
     app.config['SECRET_KEY'] = 'nyu-carbon'
     #app.config['SQLALCHEMY_DATABASE_URI'] = db_url
     app.config['SQLALCHEMY_DATABASE_URI']= jawsDB_url
-    db.init_app(app)
+    db.init_app(app) 
     CORS(app)
 
     from .views import views
