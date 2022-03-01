@@ -8,7 +8,7 @@ auth = Blueprint('auth', __name__)
 @auth.route('/api')
 def index():
     
-    result = db.session.query(coolcat).filter_by(token_id=9940).first()
+    result = db.session.query(coolcat).filter_by(token_id=10).first()
     return str(result.watt_per_tran)
 
 @auth.route('/co2e', methods=['POST'])
