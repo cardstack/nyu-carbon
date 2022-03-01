@@ -11,7 +11,7 @@ def index():
     result = db.session.query(coolcat).filter_by(token_id=10).first()
     return str(result.watt_per_tran)
 
-@auth.route('/co2e', methods=['POST'])
+@auth.route('/co2e', methods=['POST']) 
 def postInput():
     insertValues = request.get_json()
     x1=insertValues["contract"]
