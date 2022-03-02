@@ -2,7 +2,7 @@ from . import db
 
 class coolcat(db.Model):
     token_id = db.Column(db.Integer, primary_key = True)
-    receipt_gas_used = db.Column(db.String(10))
+    accumulative_gas_fee= db.Column(db.String(10))
     watt_per_tran = db.Column(db.Float(10))
 
 
