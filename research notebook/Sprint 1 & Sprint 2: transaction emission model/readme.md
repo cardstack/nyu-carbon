@@ -8,7 +8,7 @@ Basically, I will answer the following queestions and reord our models.
 
 3. Existing ETH emission estimation and their limits
 
-----------------------------------------------------------------------------------------------------
+
 
 Transaction model V1.0
 
