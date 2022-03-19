@@ -23,5 +23,5 @@ def postInput():
     if not result:
         return jsonify({'result': "Result not found "})
     else:
-        return jsonify({'result': "Result： "+ str(round(result.watt_per_tran,8))+ "   KG"})
+        return jsonify({'result': "Result： "+ str(round(result.watt_per_tran,3))+ "   KG"})
 

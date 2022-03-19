@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css">
     <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js"></script>
 </head>
 <style type="text/css">
     .help-block {
@@ -51,12 +51,14 @@
     </br>
         <p class="fs-1 fw-bolder">NFT Transaction CO2e</p>
         <label class="fs-5 fw-bolder">Contract Address</label><br>
-        <input type="text" id="contract" value=""><br><br>
+        <input type="text" id="contract" value="" style="width:400px; height:40px"><br><br>
         <label class="fs-5 fw-bolder">Token ID</label><br>
-        <input type="text" id="token" value=""><br><br>
-        <button id="btn_search" class="btn btn-outline-success" type="button">Search</button><br><br>
-        
+        <input type="text" id="token" value="" style="width:400px; height:40px"><br><br>
         <p class="fs-5 fw-bolder"> <span id="resultText"></span></p>
+            <button type="button" id="btn_search" class="btn btn-outline-success">Search</button>
+            <button type="button" id="btn_send" class="btn btn-outline-primary" style="display: none">Offset</button><br><br>
+
+        <p class="fs-5 fw-bolder"> <span id="hello"></span></p>
     </div>
     <br>
    
@@ -83,29 +85,287 @@ function postData(url, data) {
         .then(response => response.json()) // output json
 }
 
-
+var result=""
+var contract =""
+var token= ""
+var myContract = "";
 function submit(){
 
-    const contract = document.getElementById('contract').value;
-    const token = document.getElementById('token').value;
+    contract = document.getElementById('contract').value;
+    token = document.getElementById('token').value;
 
     const data = {contract, token}
 
-
     postData('https://nyu-carbon.herokuapp.com/co2e', data)
     .then(data => {
-        const result=data.result
+        result=data.result
         document.getElementById('resultText').innerHTML=result;
     })
     .catch(error => console.error(error))
 
 }
 
+
+$(document).ready(function(){
+    web3 = new Web3(web3.currentProvider);
+    var address = "0x8f47A3628cFA4C230Ed4EC6044fd663f23777Cf0";
+    var address_ = "0xB40fcA5A30230F925887E09d7942ab01DE19b787";
+    var abi = [
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			}
+		],
+		"name": "add",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_data",
+				"type": "string"
+			}
+		],
+		"name": "set",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "data",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "position",
+				"type": "uint256"
+			}
+		],
+		"name": "get",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getAll",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "hello",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "ids",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+    var abi_ =[
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "position",
+				"type": "uint256"
+			}
+		],
+		"name": "destroy",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "contract_address",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "token_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "co2",
+				"type": "uint256"
+			}
+		],
+		"name": "fetchTransaction",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getAll",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "contract_address",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "token_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "co2",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct DemoContract.Transcation[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "position",
+				"type": "uint256"
+			}
+		],
+		"name": "getToken",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "transcations",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "contract_address",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "token_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "co2",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+    myContract = new web3.eth.Contract(abi_, address_);
+   // myContract.methods.hello().call().then(function(text)
+   // {
+       // $("#hello").html(text)
+    //})
+})
+
+function sendData()
+{
+    var co2e = result[8] + result[9] + result[10] + result[11]
+  
+    web3.eth.getAccounts().then(function(accounts)
+    {
+        var acc = accounts[0];
+        return myContract.methods.fetchTransaction(contract, parseInt(token), parseInt(co2e)).send({from: acc});
+    }).then(function(tx)
+    {
+        console.log(tx);
+    }).catch(function(tx)
+    {
+        console.log(tx);
+    })
+}
+
 $("#btn_search").click(function () {
-            submit()
+            submit();
+            $("#btn_send").show();
         }); 
 
+$("#btn_send").click(function () {
+        sendData(); 
 
+        }); 
+
+       
 
 
 </script>
