@@ -58,7 +58,7 @@
             <button type="button" id="btn_search" class="btn btn-outline-success">Search</button>
             <button type="button" id="btn_send" class="btn btn-outline-primary" style="display: none">Offset</button><br><br>
 
-        <p class="fs-5 fw-bolder"> <span id="hello"></span></p>
+        <p class="fs-5 fw-bolder"> <span id="BCT"></span></p>
     </div>
     <br>
    
@@ -89,6 +89,7 @@ var result=""
 var contract =""
 var token= ""
 var myContract = "";
+var co2e ="";
 function submit(){
 
     contract = document.getElementById('contract').value;
@@ -100,135 +101,17 @@ function submit(){
     .then(data => {
         result=data.result
         document.getElementById('resultText').innerHTML=result;
+		$("#btn_send").show();
     })
     .catch(error => console.error(error))
 
 }
 
 
-$(document).ready(function(){
+$(document).ready(function BCTBalance(){
     web3 = new Web3(web3.currentProvider);
-    var address = "0x8f47A3628cFA4C230Ed4EC6044fd663f23777Cf0";
-    var address_ = "0xB40fcA5A30230F925887E09d7942ab01DE19b787";
-    var abi = [
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "id",
-				"type": "uint256"
-			}
-		],
-		"name": "add",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_data",
-				"type": "string"
-			}
-		],
-		"name": "set",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "data",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "position",
-				"type": "uint256"
-			}
-		],
-		"name": "get",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getAll",
-		"outputs": [
-			{
-				"internalType": "uint256[]",
-				"name": "",
-				"type": "uint256[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "hello",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "pure",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "ids",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	}
-];
-    var abi_ =[
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "position",
-				"type": "uint256"
-			}
-		],
-		"name": "destroy",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
+	var address_NYUCarbon = "0xfFE47EE4D6e033d675862664E3FD905B62B76E86";
+	var abi_NYUCarbon = [
 	{
 		"inputs": [
 			{
@@ -247,51 +130,38 @@ $(document).ready(function(){
 				"type": "uint256"
 			}
 		],
-		"name": "fetchTransaction",
+		"name": "withdraw",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
 		"inputs": [],
-		"name": "getAll",
+		"name": "getBalance",
 		"outputs": [
 			{
-				"components": [
-					{
-						"internalType": "string",
-						"name": "contract_address",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "token_id",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "co2",
-						"type": "uint256"
-					}
-				],
-				"internalType": "struct DemoContract.Transcation[]",
+				"internalType": "uint256",
 				"name": "",
-				"type": "tuple[]"
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"inputs": [
+		"inputs": [],
+		"name": "getLatest",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
 			{
 				"internalType": "uint256",
-				"name": "position",
+				"name": "",
 				"type": "uint256"
-			}
-		],
-		"name": "getToken",
-		"outputs": [
+			},
 			{
 				"internalType": "uint256",
 				"name": "",
@@ -331,21 +201,21 @@ $(document).ready(function(){
 		"type": "function"
 	}
 ]
-    myContract = new web3.eth.Contract(abi_, address_);
-   // myContract.methods.hello().call().then(function(text)
-   // {
-       // $("#hello").html(text)
-    //})
+	myContract = new web3.eth.Contract(abi_NYUCarbon, address_NYUCarbon);
+    myContract.methods.getBalance().call().then(function(text)
+    {
+        $("#BCT").html("BCT token: "+ text)
+    })
 })
 
-function sendData()
+function offsetCO2()
 {
-    var co2e = result[8] + result[9] + result[10] + result[11]
+    co2e = result[8] + result[9] + result[10] + result[11]
   
     web3.eth.getAccounts().then(function(accounts)
     {
         var acc = accounts[0];
-        return myContract.methods.fetchTransaction(contract, parseInt(token), parseInt(co2e)).send({from: acc});
+        return myContract.methods.withdraw(contract, parseInt(token), parseInt(co2e)).send({from: acc});
     }).then(function(tx)
     {
         console.log(tx);
@@ -355,14 +225,14 @@ function sendData()
     })
 }
 
+
+
 $("#btn_search").click(function () {
             submit();
-            $("#btn_send").show();
         }); 
 
-$("#btn_send").click(function () {
-        sendData(); 
-
+$("#btn_send").click(function () { 
+	offsetCO2();
         }); 
 
        
