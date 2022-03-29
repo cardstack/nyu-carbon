@@ -8,4 +8,4 @@ def home():
 
 @views.route('/search-co2e')
 def homeco2e():
-    return render_template("QueryViewII.html")
+    return render_template("QueryViewIII.html")
