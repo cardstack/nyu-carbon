@@ -5,6 +5,7 @@ pragma solidity ^0.8.7;
 contract testBurn{
     
     address offseter;
+    address internal constant zero_address = address(0);
     uint256 value;
     uint256 balance;
     uint256 offset_amount;
@@ -35,7 +36,7 @@ contract testBurn{
 
     // burn all balance in the contract
     function burn() public payable {
-        address payable _to = payable(address(0));
+        address payable _to = payable(zero_address);
 
         // get current balance in contract, reday for burn
         offset_amount = getBalance();
