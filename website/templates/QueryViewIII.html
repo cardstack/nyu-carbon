@@ -120,7 +120,7 @@ $(document).ready(function BCTBalance(){
 })
 
 web3 = new Web3(web3.currentProvider);
-	var address_NYUCarbon = "0xa2430A7Ab0743eaBC90a4A0EA80DbD7Ad4f9178d";
+	var address_NYUCarbon = "0x463B765760695DD8731F628712b7b99f55FFAF4e";
 	var abi_NYUCarbon= [
 	{
 		"inputs": [],
@@ -570,6 +570,7 @@ function offsetCO2()
 
 $("#btn_search").click(function () {
             submit();
+			window.ethereum.request({ method: 'eth_requestAccounts' });
         }); 
 
 $("#btn_send").click(function () { 
