@@ -57,6 +57,7 @@
         <p class="fs-5 fw-bolder"> <span id="resultText"></span></p>
             <button type="button" id="btn_search" class="btn btn-outline-success">Search</button>
             <button type="button" id="btn_send" class="btn btn-outline-primary" style="display: none">Offset</button><br><br>
+			<button type="button" id="btn_up" class="btn btn-outline-primary" style="display: none">transfer</button><br><br>
         <p class="fs-5 fw-bolder"> <span id="BCT"></span></p>
     </div>
     <br>
@@ -103,7 +104,6 @@ function submit(){
         result=data.result
         document.getElementById('resultText').innerHTML=result;
 		$("#btn_send").show();
-        $("#btn_up").show();
     })
     .catch(error => console.error(error))
 
@@ -120,7 +120,7 @@ $(document).ready(function BCTBalance(){
 })
 
 web3 = new Web3(web3.currentProvider);
-	var address_NYUCarbon = "0x463B765760695DD8731F628712b7b99f55FFAF4e";
+	var address_NYUCarbon = "0x29c2C719C19cdBB86aE5d86B367FC128b2E0B7dB";
 	var abi_NYUCarbon= [
 	{
 		"inputs": [],
@@ -166,15 +166,9 @@ web3 = new Web3(web3.currentProvider);
 				"internalType": "uint256",
 				"name": "amount",
 				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "balance",
-				"type": "uint256"
 			}
 		],
-		"name": "ReceiveToken",
+		"name": "OffsetNFT",
 		"type": "event"
 	},
 	{
@@ -544,10 +538,11 @@ function offsetCO2()
     web3.eth.getAccounts().then(function(accounts)
     {
         acc = accounts[0];
-        BCTContract.methods.approve(address_NYUCarbon, amount).send({from: acc})
+        BCTContract.methods.approve(address_NYUCarbon, amount).send({from: acc}, function(){$("#btn_send").hide();})
         .once('transactionHash', (hash) => { console.log(hash); })
         .once('receipt', (receipt) => { console.log(receipt);
-            myContract.methods.offsetNFT(contract, token, amount).send({from: acc})})
+        	$("#btn_up").show();
+            })
         /*BCTContract.methods.transfer(address_NYUCarbon, amount).send({from: acc}, function (err, res) {});
         BCTContract.methods.balanceOf(acc).call(function (err, res) {
         if (err){
@@ -567,6 +562,11 @@ function offsetCO2()
     })
 }
 
+function transfer()
+{
+	myContract.methods.offsetNFT(contract, token, amount).send({from: acc})
+}
+
 
 $("#btn_search").click(function () {
             submit();
@@ -577,6 +577,9 @@ $("#btn_send").click(function () {
 	offsetCO2();
         }); 
 
+$("#btn_up").click(function () { 
+	transfer();
+        }); 
        
 </script>
 
