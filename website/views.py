@@ -11,5 +11,5 @@ def homeco2e():
     return render_template("QueryViewIII.html")
 
 @views.route('/about-us')
-def homeco2e():
+def aboutUs():
     return render_template("about_us.html")
