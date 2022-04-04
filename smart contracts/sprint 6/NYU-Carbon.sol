@@ -13,19 +13,19 @@ contract NYUCarbonContract {
         return token.balanceOf(address(this));
     }
  
-    function offsetNFT(address contract_address, uint256 token_id, uint256 amt) public { 
+    function offsetNFT(address contract_address, uint256 token_id, uint256 amt) external { 
         token.transferFrom(msg.sender, address(this), amt);
         offsets[contract_address][token_id] += amt;
         emit OffsetNFT(msg.sender, amt);
         
     }  
 
-    function getOffset(address contract_address, uint256 token_id) view public returns(uint) {
+    function getOffset(address contract_address, uint256 token_id) view external returns(uint) {
         return  offsets[contract_address][token_id];
     }
 
     // burn all balance in the contract
-    function burnToken() public payable {
+    function burnToken() public{
         token.burn(token.balanceOf(address(this)));
         
     }
