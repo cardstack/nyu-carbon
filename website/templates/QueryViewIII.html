@@ -53,11 +53,14 @@
         <label class="fs-5 fw-bolder">Contract Address</label><br>
         <input type="text" id="contract" value="" style="width:400px; height:40px"><br><br>
         <label class="fs-5 fw-bolder">Token ID</label><br>
-        <input type="text" id="token" value="" style="width:400px; height:40px"><br><br>
+        <input type="text" id="token" value="" style="width:400px; height:40px">
+		<span class="badge bg-success" id="greenLabel" style="display: none">Carbon-free</span>&nbsp;&nbsp;&nbsp;
+		<span class="spinner-border text-primary" role="status" aria-hidden="true" id="loading" style="display: none"></span>
+		<br><br>
         <p class="fs-5 fw-bolder"> <span id="resultText"></span></p>
             <button type="button" id="btn_search" class="btn btn-outline-success">Search</button>
-            <button type="button" id="btn_send" class="btn btn-outline-primary" style="display: none">Offset</button><br><br>
-			<button type="button" id="btn_up" class="btn btn-outline-primary" style="display: none">transfer</button><br><br>
+            <button type="button" id="btn_send" class="btn btn-outline-primary" style="display: none">Approve</button>
+			<button type="button" id="btn_up" class="btn btn-outline-primary" style="display: none">Offset</button><br><br>
         <p class="fs-5 fw-bolder"> <span id="BCT"></span></p>
     </div>
     <br>
@@ -98,11 +101,12 @@ function submit(){
     token = document.getElementById('token').value;
 
     const data = {contract, token}
-
+	$("#loading").show();
     postData('https://nyu-carbon.herokuapp.com/co2e', data)
     .then(data => {
         result=data.result
         document.getElementById('resultText').innerHTML=result;
+		$("#loading").hide();
 		$("#btn_send").show();
     })
     .catch(error => console.error(error))
@@ -120,38 +124,8 @@ $(document).ready(function BCTBalance(){
 })
 
 web3 = new Web3(web3.currentProvider);
-	var address_NYUCarbon = "0x29c2C719C19cdBB86aE5d86B367FC128b2E0B7dB";
+	var address_NYUCarbon = "0xb5a3976eD11e322aC9e18510CEa2338420b0a009";
 	var abi_NYUCarbon= [
-	{
-		"inputs": [],
-		"name": "burnToken",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "contract_address",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "token_id",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "amt",
-				"type": "uint256"
-			}
-		],
-		"name": "offsetNFT",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
 	{
 		"anonymous": false,
 		"inputs": [
@@ -170,6 +144,13 @@ web3 = new Web3(web3.currentProvider);
 		],
 		"name": "OffsetNFT",
 		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "burnToken",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"inputs": [],
@@ -206,6 +187,29 @@ web3 = new Web3(web3.currentProvider);
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "contract_address",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "token_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amt",
+				"type": "uint256"
+			}
+		],
+		"name": "offsetNFT",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]
@@ -534,13 +538,14 @@ function offsetCO2()
         co2e += "0"
 
     amount = co2e
-    
+    $("#loading").show();
     web3.eth.getAccounts().then(function(accounts)
     {
         acc = accounts[0];
         BCTContract.methods.approve(address_NYUCarbon, amount).send({from: acc}, function(){$("#btn_send").hide();})
         .once('transactionHash', (hash) => { console.log(hash); })
         .once('receipt', (receipt) => { console.log(receipt);
+			$("#loading").hide();
         	$("#btn_up").show();
             })
         /*BCTContract.methods.transfer(address_NYUCarbon, amount).send({from: acc}, function (err, res) {});
@@ -564,7 +569,16 @@ function offsetCO2()
 
 function transfer()
 {
-	myContract.methods.offsetNFT(contract, token, amount).send({from: acc})
+	$("#loading").show();
+	myContract.methods.offsetNFT(contract, token, amount).send({from: acc}, function(){$("#btn_send").hide();})
+	.once('transactionHash', (hash) => { console.log(hash); })
+    .once('receipt', (receipt) => {
+		 console.log(receipt); 
+		 $("#loading").hide();
+		 $("#btn_up").hide();
+		 $("#greenLabel").show();
+		})
+
 }
 
 
