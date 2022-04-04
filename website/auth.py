@@ -21,7 +21,7 @@ def postInput():
     result = db.session.query(coolcat).filter_by(token_id=input[1]).first()
     
     if not result:
-        return jsonify({'result': "Result not found "})
+        return jsonify({'result': "Result not found"})
     else:
         return jsonify({'result': "Result： "+ str(round(result.watt_per_tran,3))+ "   KG"})
 

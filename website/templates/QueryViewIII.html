@@ -54,13 +54,15 @@
         <input type="text" id="contract" value="" style="width:400px; height:40px"><br><br>
         <label class="fs-5 fw-bolder">Token ID</label><br>
         <input type="text" id="token" value="" style="width:400px; height:40px">
-		<span class="badge bg-success" id="greenLabel" style="display: none">Carbon-free</span>&nbsp;&nbsp;&nbsp;
-		<span class="spinner-border text-primary" role="status" aria-hidden="true" id="loading" style="display: none"></span>
+		<span class="badge bg-success" id="greenLabel" style="display: none">Carbon-free</span>
+		<span class="badge bg-danger" id="redLabel" style="display: none">Not Carbon-Free</span>
+		
 		<br><br>
-        <p class="fs-5 fw-bolder"> <span id="resultText"></span></p>
+        <p class="fs-5 fw-bolder"> <span id="resultText"></span> &nbsp;&nbsp;
+			<span class="spinner-border text-primary" role="status" aria-hidden="true" id="loading" style="display: none"></span></p>
             <button type="button" id="btn_search" class="btn btn-outline-success">Search</button>
-            <button type="button" id="btn_send" class="btn btn-outline-primary" style="display: none">Approve</button>
-			<button type="button" id="btn_up" class="btn btn-outline-primary" style="display: none">Offset</button><br><br>
+            <button type="button" id="btn_approve" class="btn btn-outline-primary" style="display: none">Approve</button>
+			<button type="button" id="btn_transfer" class="btn btn-outline-primary" style="display: none">Offset</button><br><br>
         <p class="fs-5 fw-bolder"> <span id="BCT"></span></p>
     </div>
     <br>
@@ -95,33 +97,6 @@ var co2e ="";
 var bctRec ="";
 var amount ="";
 var acc;
-function submit(){
-
-    contract = document.getElementById('contract').value;
-    token = document.getElementById('token').value;
-
-    const data = {contract, token}
-	$("#loading").show();
-    postData('https://nyu-carbon.herokuapp.com/co2e', data)
-    .then(data => {
-        result=data.result
-        document.getElementById('resultText').innerHTML=result;
-		$("#loading").hide();
-		$("#btn_send").show();
-    })
-    .catch(error => console.error(error))
-
-}
-
-
-$(document).ready(function BCTBalance(){
-    
-    //myContract.methods.getOffset(contract, parseInt(token)).call().then(function(text)
-    //{
-     //   bctRec = parseInt(text)
-    //    $("#BCT").html("Cumulative offset: "+ text)
-   // })
-})
 
 web3 = new Web3(web3.currentProvider);
 	var address_NYUCarbon = "0xb5a3976eD11e322aC9e18510CEa2338420b0a009";
@@ -531,35 +506,82 @@ web3 = new Web3(web3.currentProvider);
 ]
     BCTContract = new web3.eth.Contract(abi_BCT, address_BCT);
 
-function offsetCO2()
-{
-    co2e = result[8] + result[9] + result[11]+ result[12]+ result[13];
-    while(co2e.length < 17)
-        co2e += "0"
+$(document).ready(
+    
+	hide()
+)
 
-    amount = co2e
-    $("#loading").show();
-    web3.eth.getAccounts().then(function(accounts)
-    {
-        acc = accounts[0];
-        BCTContract.methods.approve(address_NYUCarbon, amount).send({from: acc}, function(){$("#btn_send").hide();})
-        .once('transactionHash', (hash) => { console.log(hash); })
-        .once('receipt', (receipt) => { console.log(receipt);
-			$("#loading").hide();
-        	$("#btn_up").show();
-            })
-        /*BCTContract.methods.transfer(address_NYUCarbon, amount).send({from: acc}, function (err, res) {});
-        BCTContract.methods.balanceOf(acc).call(function (err, res) {
+function query(){
+
+    contract = document.getElementById('contract').value;
+    token = document.getElementById('token').value;
+    const data = {contract, token}
+	$("#loading").show();
+    postData('https://nyu-carbon.herokuapp.com/co2e', data)
+    .then(data => {
+        result=data.result
+        document.getElementById('resultText').innerHTML=result;
+		$("#loading").hide();
+		if (result != "Result not found"){
+			checkLabel();
+		}
+
+    })
+    .catch(error => console.error(error))
+}
+
+function checkLabel()
+{
+	var offseted =""
+	co2e = result[8] + result[9] + result[11]+ result[12]+ result[13]; //Result: xx.xxx KG
+	myContract.methods.getOffset(contract, token).call(function (err, res) {
         if (err){
             console.log("An error occured", err)
              return
             }
             console.log("The balance is: ", res)
-        })*/
-        //return myContract.methods.offsetNft(contract, parseInt(token), amt).send({from: acc, value: web3.utils.toWei(amount, "ether")});
+		if (res =="0"){
+			$("#greenLabel").hide();
+			$("#redLabel").show();	
+			$("#btn_approve").show();
+		}
+		else{
+			offseted = res.slice(0, -12)   // get rid of 12 zeros
+			console.log("The balance is: ", offseted)
+			if (parseInt(offseted) >=  parseInt(co2e)){
+				$("#redLabel").hide();	
+				$("#greenLabel").show();
+			}		
+			else{
+			    $("#greenLabel").hide();
+				$("#redLabel").show();	
+				$("#btn_approve").show();
+			}
+		}			
+    })
+
+}
+
+
+function approve()
+{
+	amount = co2e
+    while(amount.length < 17) // xxxxx000000000000 = 0.0xxxxx BCT
+		amount += "0"
+
+    $("#loading").show();
+    web3.eth.getAccounts().then(function(accounts)
+    {
+        acc = accounts[0];
+        BCTContract.methods.approve(address_NYUCarbon, amount).send({from: acc}, function(){$("#btn_approve").hide();})
+        .once('transactionHash', (hash) => { console.log(hash); })
+        .once('receipt', (receipt) => { console.log(receipt);
+			$("#loading").hide();
+        	$("#btn_transfer").show();
+            })
+
     }).then(function(tx)
     {
-        
         console.log(tx);
     }).catch(function(tx)
     {
@@ -570,28 +592,37 @@ function offsetCO2()
 function transfer()
 {
 	$("#loading").show();
-	myContract.methods.offsetNFT(contract, token, amount).send({from: acc}, function(){$("#btn_send").hide();})
+	myContract.methods.offsetNFT(contract, token, amount).send({from: acc}, function(){$("#btn_approve").hide();})
 	.once('transactionHash', (hash) => { console.log(hash); })
     .once('receipt', (receipt) => {
 		 console.log(receipt); 
 		 $("#loading").hide();
-		 $("#btn_up").hide();
+		 $("#btn_transfer").hide();
+		 $("#redLabel").hide();
 		 $("#greenLabel").show();
 		})
 
 }
 
+function hide()
+{
+	$("#btn_approve").hide();
+	$("#btn_transfer").hide();
+	$("#redLabel").hide();
+	$("#greenLabel").hide();
+	$("#loading").hide();
+}
 
 $("#btn_search").click(function () {
-            submit();
-			window.ethereum.request({ method: 'eth_requestAccounts' });
+		hide();	
+		query();
         }); 
 
-$("#btn_send").click(function () { 
-	offsetCO2();
+$("#btn_approve").click(function () { 
+	approve();
         }); 
 
-$("#btn_up").click(function () { 
+$("#btn_transfer").click(function () { 
 	transfer();
         }); 
        
