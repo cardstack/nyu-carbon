@@ -642,8 +642,13 @@ $("#bnt_connect").click(function() {
 	console.log("try to connect");
 	if(window.ethereum){
 		console.log("connect");
-		ethereum.enable()
+		ethereum.request({ method: 'eth_requestAccounts' });
 	}
+	
+	// ethereum.on('disconnect', function () {
+
+	// });
+
 });
        
 </script>
