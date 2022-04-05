@@ -682,6 +682,8 @@ function query(){
 		$("#loading").hide();
 		if (result != "Result not found"){
             co2e = result[8] + result[9] + result[11]+ result[12]+ result[13]; //Result: xx.xxx KG
+            while(co2e.length < 5) // xxxxx000000000000 = 0.0xxxxx BCT
+                co2e += "0"
             bctRec = "BCT amount = "+ (parseInt(co2e)/1000000).toString() + " BCT"
             document.getElementById('BCTamount').innerHTML=bctRec;
 			checkLabel();
