@@ -114,7 +114,7 @@
 				<!-- <p style="margin-top: 5px; margin-left: 40px;"
 					   class="fs-3 fw-bolder">Connect to Wallet</p> -->
 				<img style="margin-top: 0px;"  class = "img-fluid" src="MetaMask_Fox.svg.png"alt="">
-				<button style="margin-left:0px;" type="button" id="btn_search" class="btn btn-outline-success">Connect Site to Wallet</button>
+				<button style="margin-left:0px;" type="button" id="bnt_connect" class="btn btn-outline-success">Connect Site to Wallet</button>
 
 
 			</div>
@@ -638,6 +638,13 @@ $("#btn_send").click(function () {
 	offsetCO2();
         }); 
 
+$("#bnt_connect").click(function() {
+	console.log("try to connect");
+	if(window.ethereum){
+		console.log("connect");
+		ethereum.enable()
+	}
+});
        
 </script>
 
