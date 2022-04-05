@@ -69,26 +69,16 @@
 
 				<img loading="lazy" src="https://assets.terrapass.com/wp-content/uploads/2021/07/tree.png" class="img-fluid" alt="Responsive image">
 			</div> -->
-			
-			<div class="col-md-4">
-				<p style="margin-top: 50px;" style="margin-right: 50px;" 
-				
-				class="fs-3 fw-bolder">NFT Carbon Offset Procedure</p><br>
-				<h5>Step1: Enter Contract Address</h2><br>
-				<h5>Step2: Enter Token ID</h2><br>
-				<h5>Step3: Click Search Button for Calculated CO2e</h2><br>
-				<h5>Step4: Click Offset Button for Carbon Offset</h2><br>
-				<h5>Step5:</h5>
-				<h5>Step6:</h5>
-			</div>
-
+			<!-- <div class="col-md-1"></div> -->
 			<div class="col-md-1"></div>
-		
-			<div class="col-md-4">
+
+
+			<div class="col-md-5">
 				<!-- <div class="mx-auto" style="width: 800px;"> -->
 				<div>
+
 					<!-- <h1>Transaction code</h1>-->
-					<p style="margin-top: 50px;" 
+					<p style="margin-top: 40px;" 
 					   class="fs-3 fw-bolder">NFT Transaction CO2e</p>
 					<label class="fs-5 fw-bolder">Contract Address</label><br>
 					<input type="text" id="contract" value="" style="width:400px; height:40px"><br><br>
@@ -101,25 +91,32 @@
 					<p class="fs-5 fw-bolder"> <span id="BCT"></span></p>
 				</div>
 			</div>
-
-			<div class="col-md-1"></div>
-
 			<!-- <div class="col-md-2">
 				<div style="margin-top: 550px;">
 					<img class = "img-fluid" src="MetaMask_Fox.svg.png"
 
 					alt="">
 				</div>
-
-
-
-			</div> -->
-			
+			</div> -->	
 		</div>
-		<div class="row" style="margin-top: 200px;">
-			<div class="col-md-10"></div>
-			<div class="col-md-2">
-				<img class = "img-fluid" src="MetaMask_Fox.svg.png"alt="">
+		<div class="row" style="margin-top: 0px;">
+			<div class="col-md-1"></div>
+			<div class="col-md-5">
+				<p style="margin-top: 0px;" style="margin-right: 50px;" 
+				class="fs-3 fw-bolder">NFT Carbon Offset Procedure</p>
+				<h5>Step1: Enter Contract Address</h2><br>
+				<h5>Step2: Enter Token ID</h2><br>
+				<h5>Step3: Click Search Button for Calculated CO2e</h2><br>
+				<h5>Step4: Click Offset Button for Carbon Offset</h2><br>
+			</div>
+			<!-- <div class="col-md-1"></div> -->
+			<div style="margin-top: 0px;" class="col-md-2">
+				<!-- <p style="margin-top: 5px; margin-left: 40px;"
+					   class="fs-3 fw-bolder">Connect to Wallet</p> -->
+				<img style="margin-top: 0px;"  class = "img-fluid" src="MetaMask_Fox.svg.png"alt="">
+				<button style="margin-left:0px;" type="button" id="bnt_connect" class="btn btn-outline-success">Connect Site to Wallet</button>
+
+
 			</div>
 		</div>
        
@@ -641,6 +638,18 @@ $("#btn_send").click(function () {
 	offsetCO2();
         }); 
 
+$("#bnt_connect").click(function() {
+	console.log("try to connect");
+	if(window.ethereum){
+		console.log("connect");
+		ethereum.request({ method: 'eth_requestAccounts' });
+	}
+	
+	// ethereum.on('disconnect', function () {
+
+	// });
+
+});
        
 </script>
 
