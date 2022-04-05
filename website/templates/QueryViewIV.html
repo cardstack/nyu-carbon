@@ -46,30 +46,43 @@
         </div>
       </div>      
     </nav>
-    <div class="content container-lg">
+<div class="container-lg"> 
     <div class="mx-auto" style="width: 800px;">
         <!-- <h1>Transaction code</h1>-->
     </br>
         <p class="fs-1 fw-bolder">NFT Transaction CO2e</p>
+    <form action="/action_page.php"> 
         <label class="fs-5 fw-bolder">Contract Address</label><br>
-        <input type="text" id="contract" value="" style="width:400px; height:40px"><br><br>
+        <input class="form-control" type="text" id="contract" style="width:410px; height:40px"><br>
         <label class="fs-5 fw-bolder">Token ID</label><br>
-        <input type="text" id="token" value="" style="width:400px; height:40px">
+        <input class="form-control" type="text" id="token"  style="width:410px; height:40px">
+    </form>
 		<span class="badge bg-success" id="greenLabel" style="display: none">Carbon-free</span>
 		<span class="badge bg-danger" id="redLabel" style="display: none">Not Carbon-Free</span>
 		
 		<br><br>
-        <p class="fs-5 fw-bolder"> <span id="resultText"></span> &nbsp;&nbsp;
+        <p class="fs-5 fw-bolder"> <span id="resultText"></span>
+        <p class="fs-5 fw-bolder"> <span id="BCTamount"></span> &nbsp;&nbsp;
 			<span class="spinner-border text-primary" role="status" aria-hidden="true" id="loading" style="display: none"></span></p>
             <button type="button" id="btn_search" class="btn btn-outline-success">Search</button>
             <button type="button" id="btn_approve" class="btn btn-outline-primary" style="display: none">Approve</button>
 			<button type="button" id="btn_transfer" class="btn btn-outline-primary" style="display: none">Offset</button><br><br>
-			
     </div>
-	<br><br><br><br><br>
-	<div class="float-end"><button type="button" id="btn_connect" class="btn btn-outline-primary">Connect to wallet</button></div>
+    <div class="mx-auto">
+        <ul class="list-unstyled">
+            <li class="fs-6 fw-bolder">Guide:
+              <ul>
+                <li>Search a NFT for its CO2e</li>
+                <li>Approve the BCT token amount to offset CO2e</li>
+                <li>Offset the carbon emission</li>
+              </ul>
+            </li>
+          </ul>
+    </div>
+    
+	<div class="float-end"><button type="button" id="btn_connect" class="btn btn-outline-secondary"><img src="web_design/MetaMask_Fox.svg.png" width="25" /> Connect To Wallet</button></div>
     <br>
-   
+</div>  
 
 </body>
 </html>
@@ -102,8 +115,21 @@ var amount ="";
 var acc;
 
 web3 = new Web3(web3.currentProvider);
-	var address_NYUCarbon = "0xF379609573BF7478152B9554efc6e240d7295988";
+	var address_NYUCarbon = "0x6740D0920b5f2bdEb25Caa89FA37c9cE1d55d582";
 	var abi_NYUCarbon= [
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amt",
+				"type": "uint256"
+			}
+		],
+		"name": "burnToken",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
@@ -196,6 +222,52 @@ web3 = new Web3(web3.currentProvider);
 		"type": "event"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "contract_address",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "token_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amt",
+				"type": "uint256"
+			}
+		],
+		"name": "offsetNFT",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "contract_address",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "token_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "CO2_balance",
+				"type": "uint256"
+			}
+		],
+		"name": "stamping",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "BalanceOfSender",
 		"outputs": [
@@ -206,13 +278,6 @@ web3 = new Web3(web3.currentProvider);
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "burnToken",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -263,42 +328,6 @@ web3 = new Web3(web3.currentProvider);
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "amt",
-				"type": "uint256"
-			}
-		],
-		"name": "offsetNFT",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "CO2_balance",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "contract_address",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "token_id",
-				"type": "uint256"
-			}
-		],
-		"name": "stamping",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -643,24 +672,30 @@ function query(){
     contract = document.getElementById('contract').value;
     token = document.getElementById('token').value;
     const data = {contract, token}
-	$("#loading").show();
-    postData('https://nyu-carbon.herokuapp.com/co2e', data)
-    .then(data => {
+    if (contract.length && token.length >0)
+    {
+        $("#loading").show();
+        postData('https://nyu-carbon.herokuapp.com/co2e', data)
+        .then(data => {
         result=data.result
         document.getElementById('resultText').innerHTML=result;
 		$("#loading").hide();
 		if (result != "Result not found"){
+            co2e = result[8] + result[9] + result[11]+ result[12]+ result[13]; //Result: xx.xxx KG
+            bctRec = "BCT amount = "+ (parseInt(co2e)/1000000).toString() + " BCT"
+            document.getElementById('BCTamount').innerHTML=bctRec;
 			checkLabel();
 		}
 
     })
-    .catch(error => console.error(error))
+    .catch(error => console.error(error))        
+    }
+
 }
 
 function checkLabel()
 {
 	var offseted =""
-	co2e = result[8] + result[9] + result[11]+ result[12]+ result[13]; //Result: xx.xxx KG
 	myContract.methods.getOffset(contract, token).call(function (err, res) {
         if (err){
             console.log("An error occured", err)
@@ -700,10 +735,11 @@ function approve()
     web3.eth.getAccounts().then(function(accounts)
     {
         acc = accounts[0];
-        BCTContract.methods.approve(address_NYUCarbon, amount).send({from: acc}, function(){$("#btn_approve").hide();})
+        BCTContract.methods.approve(address_NYUCarbon, amount).send({from: acc}, function(){})
         .once('transactionHash', (hash) => { console.log(hash); })
         .once('receipt', (receipt) => { console.log(receipt);
 			$("#loading").hide();
+            $("#btn_approve").hide();
         	$("#btn_transfer").show();
             })
 
