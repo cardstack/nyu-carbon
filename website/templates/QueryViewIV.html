@@ -681,7 +681,9 @@ function query(){
         document.getElementById('resultText').innerHTML="Result： " + result +" KG";
 		$("#loading").hide();
 		if (result != "Result not found"){
-            co2e = result.replace(".", "");
+            co2e = result.replace(".", ""); // xx.xxx to xxxxx
+            while(co2e.length < 5) 
+                co2e += "0"
             bctRec = "BCT amount = "+ (parseFloat(result)/1000).toString() + " BCT"
             document.getElementById('BCTamount').innerHTML=bctRec;
 			checkLabel();
@@ -727,10 +729,7 @@ function checkLabel()
 
 function approve()
 {
-	amount = co2e
-    while(amount.length < 17) // xxxxx000000000000 = 0.0xxxxx BCT
-		amount += "0"
-
+	amount = co2e +"000000000000" // xxxxx000000000000 = 0.0xxxxx BCT
     $("#loading").show();
     web3.eth.getAccounts().then(function(accounts)
     {
