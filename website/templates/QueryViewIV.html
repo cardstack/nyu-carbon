@@ -691,17 +691,19 @@ function query(){
     contract = document.getElementById('contract').value;
     token = document.getElementById('token').value;
     const data = {contract, token}
-    if (contract.length && token.length >0)
+    if (contract.length >0 && token.length >0)
     {
         $("#loading").show();
         postData('https://nyu-carbon.herokuapp.com/co2e', data)
         .then(data => {
         result=data.result
-        document.getElementById('resultText').innerHTML=result;
+        document.getElementById('resultText').innerHTML="Result： " + result +" KG";
 		$("#loading").hide();
 		if (result != "Result not found"){
-            co2e = result[8] + result[9] + result[11]+ result[12]+ result[13]; //Result: xx.xxx KG
-            bctRec = "BCT amount = "+ (parseInt(co2e)/1000000).toString() + " BCT"
+            co2e = result.replace(".", ""); // xx.xxx to xxxxx
+            while(co2e.length < 5) 
+                co2e += "0"
+            bctRec = "BCT amount = "+ (parseFloat(result)/1000).toString() + " BCT"
             document.getElementById('BCTamount').innerHTML=bctRec;
 			checkLabel();
 		}
@@ -746,10 +748,7 @@ function checkLabel()
 
 function approve()
 {
-	amount = co2e
-    while(amount.length < 17) // xxxxx000000000000 = 0.0xxxxx BCT
-		amount += "0"
-
+	amount = co2e +"000000000000" // xxxxx000000000000 = 0.0xxxxx BCT
     $("#loading").show();
     web3.eth.getAccounts().then(function(accounts)
     {
