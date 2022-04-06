@@ -672,7 +672,7 @@ function query(){
     contract = document.getElementById('contract').value;
     token = document.getElementById('token').value;
     const data = {contract, token}
-    if (contract.length && token.length >0)
+    if (contract.length >0 && token.length >0)
     {
         $("#loading").show();
         postData('https://nyu-carbon.herokuapp.com/co2e', data)
