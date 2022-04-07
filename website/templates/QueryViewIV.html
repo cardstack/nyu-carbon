@@ -66,7 +66,7 @@
 			<span class="spinner-border text-primary" role="status" aria-hidden="true" id="loading" style="display: none"></span></p>
             <button type="button" id="btn_search" class="btn btn-outline-success">Search</button>
             <button type="button" id="btn_approve" class="btn btn-outline-primary" style="display: none">Approve</button>
-			<button type="button" id="btn_transfer" class="btn btn-outline-primary" style="display: none">Offset</button><br><br>
+			<button type="button" id="btn_transfer" class="btn btn-outline-dark" style="display: none">Offset</button><br><br>
     </div>
     <div class="mx-auto">
         <ul class="list-unstyled">
@@ -684,7 +684,7 @@ function query(){
             co2e = result.replace(".", ""); // xx.xxx to xxxxx
             while(co2e.length < 5) 
                 co2e += "0"
-            bctRec = "BCT amount = "+ (parseFloat(result)/1000).toString() + " BCT"
+            bctRec = "BCT amount = "+ (parseFloat(result)/1000).toFixed(6) + " BCT"
             document.getElementById('BCTamount').innerHTML=bctRec;
 			checkLabel();
 		}
