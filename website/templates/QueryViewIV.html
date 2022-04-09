@@ -47,7 +47,7 @@
       </div>      
     </nav>
 <div class="container-lg"> 
-    <div class="mx-auto" style="width: 800px;">
+    <div style="width: 600px; float: left;">
         <!-- <h1>Transaction code</h1>-->
     </br>
         <p class="fs-1 fw-bolder">NFT Transaction CO2e</p>
@@ -57,8 +57,8 @@
         <label class="fs-5 fw-bolder">Token ID</label><br>
         <input class="form-control" type="text" id="token"  style="width:410px; height:40px">
     </form>
-		<span class="badge bg-success" id="greenLabel" style="display: none">Carbon-free</span>
-		<span class="badge bg-danger" id="redLabel" style="display: none">Not Carbon-Free</span>
+		<span class="badge bg-success" id="greenLabel" style="display: none">Carbon Neutral</span>
+		<span class="badge bg-danger" id="redLabel" style="display: none">Not Carbon Neutral</span>
 		
 		<br><br>
         <p class="fs-5 fw-bolder"> <span id="resultText"></span>
@@ -67,22 +67,26 @@
             <button type="button" id="btn_search" class="btn btn-outline-success">Search</button>
             <button type="button" id="btn_approve" class="btn btn-outline-primary" style="display: none">Approve</button>
 			<button type="button" id="btn_transfer" class="btn btn-outline-dark" style="display: none">Offset</button><br><br>
-    </div>
-    <div class="mx-auto">
-        <ul class="list-unstyled">
-            <li class="fs-6 fw-bolder">Guide:
-              <ul>
-                <li>Search a NFT for its CO2e</li>
-                <li>Approve the BCT token amount to offset CO2e</li>
-                <li>Offset the carbon emission</li>
+            <ul class="list-unstyled">
+                <li class="fs-6 fw-bolder">Guide:
+                  <ul>
+                    <li>Search a NFT for its CO2e</li>
+                    <li>Approve the BCT token amount to offset CO2e</li>
+                    <li>Offset the carbon emission</li>
+                  </ul>
+                </li>
               </ul>
-            </li>
-          </ul>
+              <div class="float-end"><button type="button" id="btn_connect" class="btn btn-outline-secondary"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/512px-MetaMask_Fox.svg.png?20201112074605" width="25" /> Connect To Wallet</button></div>
+    </div>
+    <div style="margin-left: 620px;"> 
+        <iframe class="embed-responsive-item" id="imageBox"  style="width:100%; height: 800px" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
     </div>
     
-	<div class="float-end"><button type="button" id="btn_connect" class="btn btn-outline-secondary"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/512px-MetaMask_Fox.svg.png?20201112074605" width="25" /> Connect To Wallet</button></div>
+	
     <br>
 </div>  
+
+
 
 </body>
 </html>
@@ -671,6 +675,7 @@ function query(){
 
     contract = document.getElementById('contract').value;
     token = document.getElementById('token').value;
+    document.getElementById('imageBox').src = "https://opensea.io/assets/" + contract + "/" + token;
     const data = {contract, token}
     if (contract.length >0 && token.length >0)
     {
