@@ -1,5 +1,6 @@
 # Phase 1: Project Definition
 
+Crypto currency transaction is costly. See: https://postergrind.com/how-much-energy-does-it-take-to-make-an-nft/?utm_source=rss&utm_medium=rss&utm_campaign=how-much-energy-does-it-take-to-make-an-nft
 In this phase, I will try to define the emission source, go over existing researches and define our scope.
 
 ## 1.1 Emission Source
