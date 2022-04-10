@@ -1,8 +1,7 @@
 # Phase 1: Project Definition
 
-Crypto currency transaction is costly. See: https://postergrind.com/how-much-energy-does-it-take-to-make-an-nft/?utm_source=rss&utm_medium=rss&utm_campaign=how-much-energy-does-it-take-to-make-an-nft
 In this phase, I will try to define the emission source, go over existing researches and define our scope.
-
+Crypto currency transaction is costly. See: https://postergrind.com/how-much-energy-does-it-take-to-make-an-nft/?utm_source=rss&utm_medium=rss&utm_campaign=how-much-energy-does-it-take-to-make-an-nft
 ## 1.1 Emission Source
 
 As shown in the graph below, there are three sources during a transaction of crypto currency: verification, mining, propagation.
