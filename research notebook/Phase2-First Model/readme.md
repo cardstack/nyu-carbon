@@ -64,6 +64,7 @@ Boom! Electricity-carbon factor = 0.0004. Now we have our first working model!
 
 After testing with some real transitions, the carbon emission derived from our first model is way smaller than the average emission in the reports discussed in phase 1. Here are limitations of our model: 
 
-1. Ignored hardware difference
-2. Power function is a linear regression model
-3. Electricity-carbon factor is too simple and need more scientific source
+1. The model is only works in PoS model, no estimation of multiple miners situation in PoW network.
+2. Ignored hardware difference
+3. Power function is a linear regression model
+4. Electricity-carbon factor is too simple and need more scientific source
