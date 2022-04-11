@@ -4,11 +4,7 @@ views = Blueprint('views', __name__)
 
 @views.route('/')
 def home():
-    return render_template("QueryViewIV.html")
-
-@views.route('/search-co2e')
-def homeco2e():
-    return render_template("QueryViewIII.html")
+    return render_template("QueryViewV.html")
 
 @views.route('/about-us')
 def aboutUs():
