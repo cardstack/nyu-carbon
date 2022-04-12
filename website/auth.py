@@ -9,7 +9,7 @@ auth = Blueprint('auth', __name__)
 def index():
     
     result = db.session.query(coolcat).filter_by(token_id=10).first()
-    return str(result.watt_per_tran)
+    return str(result.co2_per_token)
 
 @auth.route('/co2e', methods=['POST']) 
 def postInput():
@@ -20,7 +20,7 @@ def postInput():
     x1=insertValues["contract"]
     x2=insertValues["token"]
     input = np.array([x1, x2])
-    print(input[0])
+    
     if input[0] == catContract: 
         result = db.session.query(coolcat).filter_by(token_id=input[1]).first()
     elif input[0] == dogContract:
@@ -31,5 +31,5 @@ def postInput():
     if not result:
         return jsonify({'result': "Result not found"})
     else:
-        return jsonify({'result': str(round(result.watt_per_tran,3))})
+        return jsonify({'result': str(round(result.co2_per_token,3))})
 
