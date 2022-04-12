@@ -30,12 +30,7 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbar"
-      >
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
         <span class="navbar-toggler-icon"></span>
       </button> 
       <div class="collapse navbar-collapse" id="navbar">
@@ -51,32 +46,51 @@
         <!-- <h1>Transaction code</h1>-->
     </br>
         <p class="fs-1 fw-bolder">NFT Transaction CO2e</p>
-    <form action="/action_page.php"> 
-        <label class="fs-5 fw-bolder">Contract Address</label><br>
+    <!-- <form action="/action_page.php"> 
+        <label class="fs-5 fw-bolder">NFT URL</label><br>
+        <input class="form-control" type="text" id="url" style="width:410px; height:40px">
+       <label class="fs-5 fw-bolder">Contract Address</label><br>
         <input class="form-control" type="text" id="contract" style="width:410px; height:40px"><br>
         <label class="fs-5 fw-bolder">Token ID</label><br>
         <input class="form-control" type="text" id="token"  style="width:410px; height:40px">
-    </form>
+    </form>-->
+    <label for="selectNFT" class="fs-5 fw-bolder">Select a NFT</label>
+    <div class="input-group mb-3">
+        <input class="form-control" list="datalistOptions" style="width:300px; height:40px" id="contract" placeholder="Contract address or NFT URL">
+        <datalist id="datalistOptions">
+          <option value="0x1a92f7381b9f03921564a437210bb9396471050c">Cats</option>
+          <option value="0xf4ee95274741437636e748ddac70818b4ed7d043">Dogs</option>
+          <option value="0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d">Apes</option>
+        </datalist>
+        <input type="text" class="form-control" placeholder="Token ID #" aria-label="Token ID" id="token">
+        
+        
+    </div>
+    <div class="float-end"><button type="button" id="btn_random" class="btn btn-outline-success">Find a random NFT</button></div>
 		<span class="badge bg-success" id="greenLabel" style="display: none">Carbon Neutral</span>
 		<span class="badge bg-danger" id="redLabel" style="display: none">Not Carbon Neutral</span>
 		
 		<br><br>
         <p class="fs-5 fw-bolder"> <span id="resultText"></span>
-        <p class="fs-5 fw-bolder"> <span id="BCTamount"></span> &nbsp;&nbsp;
+        <p class="fs-5 fw-bolder"> <span id="BCTamount"></span> 
 			<span class="spinner-border text-primary" role="status" aria-hidden="true" id="loading" style="display: none"></span></p>
             <button type="button" id="btn_search" class="btn btn-outline-success">Search</button>
             <button type="button" id="btn_approve" class="btn btn-outline-primary" style="display: none">Approve</button>
 			<button type="button" id="btn_transfer" class="btn btn-outline-dark" style="display: none">Offset</button><br><br>
-            <ul class="list-unstyled">
-                <li class="fs-6 fw-bolder">Guide:
-                  <ul>
-                    <li>Search a NFT for its CO2e</li>
-                    <li>Approve the BCT token amount to offset CO2e</li>
-                    <li>Offset the carbon emission</li>
-                  </ul>
-                </li>
+
+        <ul class="list-unstyled">
+            <li class="fs-6 fw-bolder">Guide:
+              <ul>
+                <li>Search a NFT for its CO2e</li>
+                <li>Approve the BCT token amount to offset CO2e</li>
+                <li>Offset the carbon emission</li>
               </ul>
-              <div class="float-end"><button type="button" id="btn_connect" class="btn btn-outline-secondary"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/512px-MetaMask_Fox.svg.png?20201112074605" width="25" /> Connect To Wallet</button></div>
+            </li>
+          </ul>
+          <br><br>
+          <div class="float-end">
+            <button type="button" id="btn_connect" class="btn btn-outline-secondary"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/512px-MetaMask_Fox.svg.png?20201112074605" width="25" /> Connect To Wallet</button>
+        </div>
     </div>
     <div style="margin-left: 620px;"> 
         <iframe class="embed-responsive-item" id="imageBox"  style="width:100%; height: 800px" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
@@ -91,6 +105,12 @@
 </body>
 </html>
 <script type="text/javascript">
+
+/*$(".dropdown-menu li a").click(function(){
+  
+  $(".btn:first-child").html($(this).text()+' <span class="caret"></span>');
+  
+});*/
 
 function postData(url, data) {
     // Default options are marked with *
@@ -111,12 +131,17 @@ function postData(url, data) {
 }
 
 var result=""
+var resultText=""
 var contract =""
 var token= ""
 var co2e ="";
 var bctRec ="";
 var amount ="";
 var acc;
+var catContract = "0x1a92f7381b9f03921564a437210bb9396471050c"
+var dogContract = "0xf4ee95274741437636e748ddac70818b4ed7d043"
+var apeContract = "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d"
+var random = false
 
 web3 = new Web3(web3.currentProvider);
 	var address_NYUCarbon = "0x6740D0920b5f2bdEb25Caa89FA37c9cE1d55d582";
@@ -671,31 +696,69 @@ $(document).ready(
 	hide()
 )
 
-function query(){
 
+function query(random){
+	document.getElementById('BCTamount').innerHTML=""
     contract = document.getElementById('contract').value;
-    token = document.getElementById('token').value;
+	if(!contract)
+	{
+		resultText = "Missing Contract Address"
+		return document.getElementById('resultText').innerHTML= resultText;
+	}
+    else if(contract[0] =="0"){
+        token = document.getElementById('token').value;
+		if(!token){
+			resultText = "Missing Token ID"
+			return document.getElementById('resultText').innerHTML= resultText;
+		}
+	}
+    else
+    {
+        let url = contract
+        var myArray = url.split("/");
+        contract = myArray[4]
+        if(random)
+            token = document.getElementById('token').value;
+        else{
+			token = myArray[5]
+			if(!token){
+				resultText = "Invalid Link"
+				return document.getElementById('resultText').innerHTML= resultText;   	
+			}
+			document.getElementById('token').value = token;
+		}
+            
+    }
+
     const data = {contract, token}
-    if (contract.length >0 && token.length >0)
+    if (contract && token )
     {
         document.getElementById('imageBox').src = "https://opensea.io/assets/" + contract + "/" + token;
         $("#loading").show();
         postData('https://nyu-carbon.herokuapp.com/co2e', data)
         .then(data => {
-        result=data.result
-        document.getElementById('resultText').innerHTML="Result： " + result +" KG";
-		$("#loading").hide();
-		if (result != "Result not found"){
-            co2e = result.replace(".", ""); // xx.xxx to xxxxx
-            while(co2e.length < 5) 
-                co2e += "0"
-            bctRec = "BCT amount = "+ (parseFloat(result)/1000).toFixed(6) + " BCT"
-            document.getElementById('BCTamount').innerHTML=bctRec;
-			checkLabel();
-		}
+        	result=data.result
+			$("#loading").hide();
+			if (result != "Result not found"){
+				resultText = "Result： " + result +" KG";
+				document.getElementById('resultText').innerHTML= resultText;
 
-    })
-    .catch(error => console.error(error))        
+        	    co2e = result.replace(".", ""); // xx.xxx to xxxxx
+        	    while(co2e.length < 5) 
+        	        co2e += "0"
+        	    bctRec = "BCT amount = "+ (parseFloat(result)/1000).toFixed(6) + " BCT"
+        	    document.getElementById('BCTamount').innerHTML=bctRec;
+				checkLabel();
+			}
+			else{
+				resultText = "Current NFT CO2e not supported"
+				return document.getElementById('resultText').innerHTML= resultText;
+			}
+		}).catch(error => console.error(error))        
+    }
+    else{
+		resultText = "Invalid Link"
+		return document.getElementById('resultText').innerHTML= resultText;   	
     }
 
 }
@@ -780,6 +843,13 @@ function hide()
 	$("#loading").hide();
 }
 
+function clear()
+{
+	document.getElementById('token').value=""
+	document.getElementById('contract').value=""
+	document.getElementById('BCTamount').value=""
+}
+
 $("#btn_search").click(function () {
 		hide();	
 		query();
@@ -791,6 +861,37 @@ $("#btn_approve").click(function () {
 
 $("#btn_transfer").click(function () { 
 	transfer();
+        });
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+
+$("#btn_random").click(function () { 
+        hide();	
+
+		if(document.getElementById('contract').value != catContract 
+			&& document.getElementById('contract').value != dogContract 
+			&& document.getElementById('contract').value != apeContract
+			&& contract != catContract && contract != dogContract && contract != apeContract){
+			if(!resultText || resultText[0]!="R")
+				clear()
+		}
+
+        if(!document.getElementById('contract').value)
+        {
+            contractRand = getRandomInt(3)
+            if(contractRand == 0)
+                document.getElementById('contract').value = catContract
+            else if (contractRand == 1)
+                document.getElementById('contract').value = dogContract
+            else
+                document.getElementById('contract').value = apeContract
+           
+        }
+        document.getElementById('token').value = getRandomInt(9941) 
+		query(true);
         });
 
 $("#btn_connect").click(function () { 
