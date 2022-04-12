@@ -62,7 +62,7 @@
           <option value="0xf4ee95274741437636e748ddac70818b4ed7d043">Dogs</option>
           <option value="0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d">Apes</option>
         </datalist>
-        <input type="text" class="form-control" placeholder="Token ID" aria-label="Token ID" id="token">
+        <input type="text" class="form-control" placeholder="Token ID #" aria-label="Token ID" id="token">
         
         
     </div>
@@ -697,23 +697,19 @@ $(document).ready(
 
 
 function query(random){
-
-
-        contract = document.getElementById('contract').value;
-        if(contract[0] =="0")
+    contract = document.getElementById('contract').value;
+    if(contract[0] =="0")
+        token = document.getElementById('token').value;
+    else
+    {
+        let url = contract
+        var myArray = url.split("/");
+        contract = myArray[4]
+        if(random)
             token = document.getElementById('token').value;
         else
-        {
-            let url = contract
-            var myArray = url.split("/");
-            contract = myArray[4]
-            if(random)
-                token = document.getElementById('token').value;
-            else
-                token = myArray[5]
-        }
-
-    
+            token = myArray[5]
+    }
 
     const data = {contract, token}
     if (contract  && token )
