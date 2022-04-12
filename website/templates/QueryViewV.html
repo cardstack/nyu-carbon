@@ -131,6 +131,7 @@ function postData(url, data) {
 }
 
 var result=""
+var resultText=""
 var contract =""
 var token= ""
 var co2e ="";
@@ -697,9 +698,20 @@ $(document).ready(
 
 
 function query(random){
+	document.getElementById('BCTamount').innerHTML=""
     contract = document.getElementById('contract').value;
-    if(contract[0] =="0")
+	if(!contract)
+	{
+		resultText = "Missing Contract Address"
+		return document.getElementById('resultText').innerHTML= resultText;
+	}
+    else if(contract[0] =="0"){
         token = document.getElementById('token').value;
+		if(!token){
+			resultText = "Missing Token ID"
+			return document.getElementById('resultText').innerHTML= resultText;
+		}
+	}
     else
     {
         let url = contract
@@ -707,34 +719,46 @@ function query(random){
         contract = myArray[4]
         if(random)
             token = document.getElementById('token').value;
-        else
-            token = myArray[5]
+        else{
+			token = myArray[5]
+			if(!token){
+				resultText = "Invalid Link"
+				return document.getElementById('resultText').innerHTML= resultText;   	
+			}
+			document.getElementById('token').value = token;
+		}
+            
     }
 
     const data = {contract, token}
-    if (contract  && token )
+    if (contract && token )
     {
         document.getElementById('imageBox').src = "https://opensea.io/assets/" + contract + "/" + token;
         $("#loading").show();
         postData('https://nyu-carbon.herokuapp.com/co2e', data)
         .then(data => {
-        result=data.result
-        document.getElementById('resultText').innerHTML="Result： " + result +" KG";
-		$("#loading").hide();
-		if (result != "Result not found"){
-            co2e = result.replace(".", ""); // xx.xxx to xxxxx
-            while(co2e.length < 5) 
-                co2e += "0"
-            bctRec = "BCT amount = "+ (parseFloat(result)/1000).toFixed(6) + " BCT"
-            document.getElementById('BCTamount').innerHTML=bctRec;
-			checkLabel();
-		}
+        	result=data.result
+			$("#loading").hide();
+			if (result != "Result not found"){
+				resultText = "Result： " + result +" KG";
+				document.getElementById('resultText').innerHTML= resultText;
 
-    })
-    .catch(error => console.error(error))        
+        	    co2e = result.replace(".", ""); // xx.xxx to xxxxx
+        	    while(co2e.length < 5) 
+        	        co2e += "0"
+        	    bctRec = "BCT amount = "+ (parseFloat(result)/1000).toFixed(6) + " BCT"
+        	    document.getElementById('BCTamount').innerHTML=bctRec;
+				checkLabel();
+			}
+			else{
+				resultText = "Current NFT CO2e not supported"
+				return document.getElementById('resultText').innerHTML= resultText;
+			}
+		}).catch(error => console.error(error))        
     }
     else{
-        document.getElementById('resultText').innerHTML="Invalid Link";
+		resultText = "Invalid Link"
+		return document.getElementById('resultText').innerHTML= resultText;   	
     }
 
 }
@@ -819,6 +843,13 @@ function hide()
 	$("#loading").hide();
 }
 
+function clear()
+{
+	document.getElementById('token').value=""
+	document.getElementById('contract').value=""
+	document.getElementById('BCTamount').value=""
+}
+
 $("#btn_search").click(function () {
 		hide();	
 		query();
@@ -839,6 +870,15 @@ function getRandomInt(max) {
 
 $("#btn_random").click(function () { 
         hide();	
+
+		if(document.getElementById('contract').value != catContract 
+			&& document.getElementById('contract').value != dogContract 
+			&& document.getElementById('contract').value != apeContract
+			&& contract != catContract && contract != dogContract && contract != apeContract){
+			if(!resultText || resultText[0]!="R")
+				clear()
+		}
+
         if(!document.getElementById('contract').value)
         {
             contractRand = getRandomInt(3)
