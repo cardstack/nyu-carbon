@@ -20,7 +20,7 @@ def postInput():
     x1=insertValues["contract"]
     x2=insertValues["token"]
     input = np.array([x1, x2])
-
+    print(input[0])
     if input[0] == catContract: 
         result = db.session.query(coolcat).filter_by(token_id=input[1]).first()
     elif input[0] == dogContract:

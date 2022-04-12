@@ -8,12 +8,12 @@ class coolcat(db.Model):
 class dog(db.Model):
     token_id = db.Column(db.Integer, primary_key = True)
     accumulative_gas_fee= db.Column(db.String(10))
-    watt_per_tran = db.Column(db.Float(10))
+    watt_per_token = db.Column(db.Float(10))
 
 class ape(db.Model):
     token_id = db.Column(db.Integer, primary_key = True)
     accumulative_gas_fee= db.Column(db.String(10))
-    watt_per_tran = db.Column(db.Float(10))
+    watt_per_token = db.Column(db.Float(10))
 
 
 def predict(input):
