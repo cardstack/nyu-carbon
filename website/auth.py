@@ -27,6 +27,8 @@ def postInput():
         result = db.session.query(dog).filter_by(token_id=input[1]).first()
     elif input[0] == apeContract:
         result = db.session.query(ape).filter_by(token_id=input[1]).first()
+    else:
+        return jsonify({'result': "Result not found"})
     
     if not result:
         return jsonify({'result': "Result not found"})
