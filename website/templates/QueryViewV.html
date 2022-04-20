@@ -794,11 +794,23 @@ function checkLabel()
 
 }
 
+function checkWallet()
+{
+	if(window.ethereum){
+		web3 = new Web3(window.ethereum)
+		ethereum.enable();
+	}
+	else if(window.web3)
+	{web3 = new Web3(window.web3.currentProvider)}
+       
+}
+
 
 function approve()
 {
 	amount = co2e +"000000000000" // xxxxx000000000000 = 0.0xxxxx BCT
     $("#loading").show();
+	checkWallet();
     web3.eth.getAccounts().then(function(accounts)
     {
         acc = accounts[0];
@@ -895,10 +907,7 @@ $("#btn_random").click(function () {
         });
 
 $("#btn_connect").click(function () { 
-	if(window.ethereum){
-		ethereum.enable();
-	}
-        }); 
-       
+	checkWallet();
+})
 </script>
 
