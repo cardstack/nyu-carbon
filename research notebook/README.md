@@ -1,3 +1,3 @@
-This is used for recording the work of Runze.
+This is used for recording the work of @Runze(fangrunze@outlook.com).
 
-Will include Runze's thoughts and reseach result via reference here.
+Will include thoughts and reseach result via reference here.
