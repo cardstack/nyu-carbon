@@ -1,5 +1,5 @@
 # Phase2: Our First Model
-
+Autor: @Runze Fang, fangrunze@outlook.com
 ## 2.1 Abstract
 
 As discussed in phase 1, we are doing a bottom-up approach of carbon emission in the mining process. This approach will later embedded with a smart contract. In this phase, the first model is given, and I will walk you through how I get there.
