@@ -69,6 +69,7 @@
     <div class="float-end"><button type="button" id="btn_random" class="btn btn-outline-success">Find a random NFT</button></div>
 		<span class="badge bg-success" id="greenLabel" style="display: none">Carbon Neutral</span>
 		<span class="badge bg-danger" id="redLabel" style="display: none">Not Carbon Neutral</span>
+		<span class="badge bg-danger" id="walletLabel" style="display: none">Wallet not detected</span>
 		
 		<br><br>
         <p class="fs-5 fw-bolder"> <span id="resultText"></span>
@@ -691,8 +692,12 @@ var abi_BCT =[
 	}
 ]
 if(window.ethereum)
-    web3 = new Web3(web3.currentProvider)   
-
+    web3 = new Web3(web3.currentProvider)
+else{
+	resultText = "Please install MetaMask wallet extension to PURGE NFT"
+	document.getElementById('resultText').innerHTML= resultText;
+}   
+	
 $(document).ready(
 	
 	hide()
@@ -742,7 +747,7 @@ function query(random){
         	result=data.result
 			$("#loading").hide();
 			if (result != "Result not found"){
-				resultText = "Result： " + result +" KG";
+				resultText = "CO2e result = " + result +" KG";
 				document.getElementById('resultText').innerHTML= resultText;
 
         	    co2e = result.replace(".", ""); // xx.xxx to xxxxx
@@ -751,7 +756,12 @@ function query(random){
         	    bctRec = "BCT amount = "+ (parseFloat(result)/1000).toFixed(6) + " BCT"
         	    document.getElementById('BCTamount').innerHTML=bctRec;
 				if(window.ethereum)
-					checkLabel();
+				{
+					$("#walletLabel").hide();
+					checkLabel();	
+				}
+				else
+					$("#walletLabel").show();	
 			}
 			else{
 				resultText = "Current NFT CO2e not supported"
@@ -857,6 +867,7 @@ function hide()
 	$("#btn_transfer").hide();
 	$("#redLabel").hide();
 	$("#greenLabel").hide();
+	$("#walletLabel").hide();
 	$("#loading").hide();
 }
 
