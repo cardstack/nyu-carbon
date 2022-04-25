@@ -1,6 +1,5 @@
 # Phase 1: Project Definition
-
-In this phase, I will try to define the emission source, go over existing researches and define our scope.
+Autor: @Runze Fang, fangrunze@outlook.com
 
 ## 1.1 Emission Source
 

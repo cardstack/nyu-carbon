@@ -1,5 +1,7 @@
 # Phase 3: Model V3
 
+Autor: @Runze Fang, fangrunze@outlook.com
+
 ## 3.1 Abstract
 
 In this phase, we continue working on the emission model. A reminder of what we have now: 

@@ -69,6 +69,7 @@
     <div class="float-end"><button type="button" id="btn_random" class="btn btn-outline-success">Find a random NFT</button></div>
 		<span class="badge bg-success" id="greenLabel" style="display: none">Carbon Neutral</span>
 		<span class="badge bg-danger" id="redLabel" style="display: none">Not Carbon Neutral</span>
+		<span class="badge bg-danger" id="walletLabel" style="display: none">Wallet not detected</span>
 		
 		<br><br>
         <p class="fs-5 fw-bolder"> <span id="resultText"></span>
@@ -81,9 +82,9 @@
         <ul class="list-unstyled">
             <li class="fs-6 fw-bolder">Guide:
               <ul>
-                <li>Search an NFT for its CO2e</li>
-                <li>Approve the BCT token amount to offset CO2e</li>
-                <li>Offset the carbon emission</li>
+                <li>Search an NFT to find out its accumulated CO2e load</li>
+                <li>Click "APPROVE" to accept the require BCT amount for the CO2e load</li>
+                <li>Click "OFFSET" to carry out the BCT transaction to Purge the CO2e load</li>
               </ul>
             </li>
           </ul>
@@ -142,10 +143,11 @@ var catContract = "0x1a92f7381b9f03921564a437210bb9396471050c"
 var dogContract = "0xf4ee95274741437636e748ddac70818b4ed7d043"
 var apeContract = "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d"
 var random = false
-
-web3 = new Web3(web3.currentProvider);
-	var address_NYUCarbon = "0x6740D0920b5f2bdEb25Caa89FA37c9cE1d55d582";
-	var abi_NYUCarbon= [
+var web3
+var myContract
+var BCTContract
+var address_NYUCarbon = "0x6740D0920b5f2bdEb25Caa89FA37c9cE1d55d582";
+var abi_NYUCarbon= [
 	{
 		"inputs": [
 			{
@@ -373,9 +375,9 @@ web3 = new Web3(web3.currentProvider);
 		"type": "function"
 	}
 ]
-	myContract = new web3.eth.Contract(abi_NYUCarbon, address_NYUCarbon);
-    var address_BCT = "0xCb38eC62A43EB019F8d79b0C1C070ccdD16D1650";
-    var abi_BCT =[
+	
+var address_BCT = "0xCb38eC62A43EB019F8d79b0C1C070ccdD16D1650";
+var abi_BCT =[
 	{
 		"inputs": [
 			{
@@ -689,10 +691,15 @@ web3 = new Web3(web3.currentProvider);
 		"type": "function"
 	}
 ]
-    BCTContract = new web3.eth.Contract(abi_BCT, address_BCT);
-
+if(window.ethereum)
+    web3 = new Web3(web3.currentProvider)
+else{
+	resultText = "Please install MetaMask wallet extension to PURGE NFT"
+	document.getElementById('resultText').innerHTML= resultText;
+}   
+	
 $(document).ready(
-    
+	
 	hide()
 )
 
@@ -705,14 +712,14 @@ function query(random){
 		resultText = "Missing Contract Address"
 		return document.getElementById('resultText').innerHTML= resultText;
 	}
-    else if(contract[0] =="0"){
+    else if(contract[0] =="0"){             //user input contract address
         token = document.getElementById('token').value;
 		if(!token){
 			resultText = "Missing Token ID"
 			return document.getElementById('resultText').innerHTML= resultText;
 		}
 	}
-    else
+    else                                    //user input url
     {
         let url = contract
         var myArray = url.split("/");
@@ -740,7 +747,7 @@ function query(random){
         	result=data.result
 			$("#loading").hide();
 			if (result != "Result not found"){
-				resultText = "Result： " + result +" KG";
+				resultText = "CO2e result = " + result +" KG";
 				document.getElementById('resultText').innerHTML= resultText;
 
         	    co2e = result.replace(".", ""); // xx.xxx to xxxxx
@@ -748,7 +755,13 @@ function query(random){
         	        co2e += "0"
         	    bctRec = "BCT amount = "+ (parseFloat(result)/1000).toFixed(6) + " BCT"
         	    document.getElementById('BCTamount').innerHTML=bctRec;
-				checkLabel();
+				if(window.ethereum)
+				{
+					$("#walletLabel").hide();
+					checkLabel();	
+				}
+				else
+					$("#walletLabel").show();	
 			}
 			else{
 				resultText = "Current NFT CO2e not supported"
@@ -766,6 +779,7 @@ function query(random){
 function checkLabel()
 {
 	var offseted =""
+	myContract = new web3.eth.Contract(abi_NYUCarbon, address_NYUCarbon);
 	myContract.methods.getOffset(contract, token).call(function (err, res) {
         if (err){
             console.log("An error occured", err)
@@ -814,6 +828,7 @@ function approve()
     web3.eth.getAccounts().then(function(accounts)
     {
         acc = accounts[0];
+		BCTContract = new web3.eth.Contract(abi_BCT, address_BCT);
         BCTContract.methods.approve(address_NYUCarbon, amount).send({from: acc}, function(){})
         .once('transactionHash', (hash) => { console.log(hash); })
         .once('receipt', (receipt) => { console.log(receipt);
@@ -852,6 +867,7 @@ function hide()
 	$("#btn_transfer").hide();
 	$("#redLabel").hide();
 	$("#greenLabel").hide();
+	$("#walletLabel").hide();
 	$("#loading").hide();
 }
 
