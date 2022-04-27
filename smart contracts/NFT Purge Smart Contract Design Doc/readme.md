@@ -44,7 +44,7 @@ State variables in solidity are introduced into the smart contract. Once the sma
     
     There might be 2 ways of solving this issue. One is embedded the green label with token standard like ERC-721. So that once the transaction happen, the NFT will be re-evaluated of carbon neutral. The other possible way is to combine the green label with time stamps. Therefore, an NFT is “green” in the latest block. 
     
-    I’m excited if we can really solve this and email me if you have more ideas.
+    I’m excited if we can really solve this and feel free to email me if you wanna talk more on this.
     
 2. Intermediary fee
     
